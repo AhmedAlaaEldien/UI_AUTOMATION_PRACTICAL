@@ -18,7 +18,7 @@ public class PlansSubscriptionsTests extends BaseTests {
      * Finally, we do the Assertion, on the subscription plans.
      */
     @Test(dataProviderClass = PlansDataProvider.class, dataProvider = "dataProvider")
-    public void GoogleSearch(HashMap<String, String> hashMap) {
+    public void plansValidation(HashMap<String, String> hashMap) {
         var subscriptionPage  = new subscriptionPage(getDriver());
         subscriptionPage
                 .clickOnCountryCurrent()

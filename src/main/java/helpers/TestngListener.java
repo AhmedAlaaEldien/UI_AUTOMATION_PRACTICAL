@@ -41,6 +41,18 @@ public class TestngListener implements ISuiteListener, ITestListener {
     public void onTestSuccess(ITestResult result) {
         MyLogger.info(result.getName(), " ******************************** " +
                 "Succeeded ********************************");
+
+        var date = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+        var srcFile = ((TakesScreenshot) WebDriverFactory.getDriver()).getScreenshotAs(OutputType.FILE);
+        MyLogger.info("TakeScreenshot", "Taking screenshot for " + result.getName());
+        try {
+            FileUtils.copyFile(srcFile, new File("output/screenshots/passedTestCases/"+ result.getName() + date +".png"));
+            Allure.addAttachment("Screenshot", FileUtils.openInputStream(srcFile));
+        } catch (IOException e) {
+            MyLogger.warning("TakeScreenshot", "Can't take screenshot for "+ result.getName()
+                    +" --------> "+ e);
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -58,7 +70,7 @@ public class TestngListener implements ISuiteListener, ITestListener {
         var srcFile = ((TakesScreenshot) WebDriverFactory.getDriver()).getScreenshotAs(OutputType.FILE);
         MyLogger.info("TakeScreenshot", "Taking screenshot for " + result.getName());
         try {
-            FileUtils.copyFile(srcFile, new File("output/screenshots/"+ result.getName() + date +".png"));
+            FileUtils.copyFile(srcFile, new File("output/screenshots/failedTestCases/"+ result.getName() + date +".png"));
             Allure.addAttachment("Screenshot", FileUtils.openInputStream(srcFile));
         } catch (IOException e) {
             MyLogger.warning("TakeScreenshot", "Can't take screenshot for "+ result.getName()
